@@ -165,3 +165,65 @@
   "request_id": 12345
 } 
 ```
+#### Запрос на получение изображения:
+```
+{
+  "type": "Map",
+  "id": 11111
+}
+```
+Ответ на запрос:
+```
+{
+  "map": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">...\n</svg>",
+  "request_id": 11111
+} 
+```
+Ключ `map` — строка с изображением карты в формате `SVG`
+![image](https://user-images.githubusercontent.com/71149773/124977269-f6e62380-e038-11eb-80de-2ba6bfa1e1d8.png)
+
+
+### Запрос на построение маршрута между двумя остановками
+Помимо стандартных свойств `id` и `type`, запрос содержит ещё два:  
+`from` — остановка, где нужно начать маршрут.  
+`to` — остановка, где нужно закончить маршрут.  
+Оба значения — названия существующих в базе остановок. Однако они, возможно, не принадлежат ни одному автобусному маршруту.
+```
+{
+      "type": "Route",
+      "from": "Biryulyovo Zapadnoye",
+      "to": "Universam",
+      "id": 4
+}
+```
+Ответ на запрос:
+```
+{
+          "items": [
+              {
+                  "stop_name": "Biryulyovo Zapadnoye",
+                  "time": 6,
+                  "type": "Wait"
+              },
+              {
+                  "bus": "297",
+                  "span_count": 2,
+                  "time": 5.235,
+                  "type": "Bus"
+              },
+              {
+                  "stop_name": "Universam",
+                  "time": 6,
+                  "type": "Wait"
+              },
+              {
+                  "bus": "635",
+                  "span_count": 1,
+                  "time": 6.975,
+                  "type": "Bus"
+              }
+          ],
+          "request_id": 5,
+          "total_time": 24.21
+      }
+ ```
