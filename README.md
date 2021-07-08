@@ -4,7 +4,28 @@
 - Находит кратчайший маршрут между остановками. 
 - Для ускорения вычислений сделана сериализация базы справочника через Google Protobuf. 
 - Реализован конструктор JSON, позволяющий находить неправильную последовательность методов на этапе компиляции.  
-
+---
+## Инструкция по сборке проекта (Visual Studio)
+1. Установить Google Protobuf. Скачать с [официального репозитория](https://github.com/protocolbuffers/protobuf/releases) архив protobuf-cpp и распаковать его на компьютере.
+2. Создать папки build-debug и build-release для сборки двух конфигураций Protobuf. Предварительно создать папку package, в которую будет складываться пакет Protobuf.
+3. Собрать и установить проект (в примере сборка Debug) следующими командами:
+```
+cmake path\protobuf-3.15.8\cmake -DCMAKE_SYSTEM_VERSION=10.0.17763.0 -DCMAKE_BUILD_TYPE=Debug \ -Dprotobuf_BUILD_TESTS=OFF 
+\ -DCMAKE_INSTALL_PREFIX=path\protobuf-3.15.8\package
+cmake --build .
+cmake --install . 
+```
+4. В папке package появился bin\protoc.exe - с помощью него будут копилироваться proto-файлы, а в папке lib - статические библиотеки для работы с Protobuf.
+5. Для компиляции proto-файла нужно выполнить следующую команду:  
+`<путь к пакету Protobuf>\bin\proto --cpp_out . transport_catalogue.proto`  
+6. Собрать проект с помощью CMake:
+```
+cmake . -DCMAKE_PREFIX_PATH=/path/to/protobuf/package
+cmake --build .
+```
+7. При необходимости добавить папки include и lib в дополнительные зависимости проекта - Additional Include Directories и Additional Dependencies.
+---
+## Запуск программы
 Для создания базы транспортного справочника и ее сериализации в файл по запросам base_requests необходимо запустить программу с параметром make_base, указав при этом входной JSON-файл.  
 Пример запуска программы для заполнения базы:  
 `transport_catalogue.exe make_base <base.json`
