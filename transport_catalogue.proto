@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package transport_catalogue_serialize;
+
+message Coordinates {
+	double lat = 1;
+	double lng = 2;
+}
+
+message Stop {
+	bytes name = 1;
+	Coordinates coordinates = 2;
+}
+
+message Bus {
+	uint32 unique_stops = 1;
+	uint32 stops_number = 2;
+	bytes number = 3;
+	repeated bytes raw_route = 4;
+	repeated Stop route = 5;
+	bool is_round_trip = 6;
+	double distance = 7;	
+}
+
+message Distance {
+	bytes from = 1;
+	bytes to = 2;
+	double distance = 3;
+}
+
+message Point {
+	double x = 1;
+	double y = 2;
+}
+
+message Rgba {
+	uint32 red = 1;
+	uint32 green = 2;
+	uint32 blue = 3;
+	double opacity = 4;
+}
+
+message Color {
+    bool is_rgba = 1;
+    string name = 2;
+    Rgba rgba = 3;
+}
+
+message RenderSettings {
+	double width = 1;
+	double height = 2;
+	double padding = 3;
+	double line_width = 4;
+	double stop_radius = 5;
+	uint32 bus_label_font_size = 6;
+	Point bus_label_offset = 7;
+	uint32 stop_label_font_size = 8;
+	Point stop_label_offset = 9;
+	Color underlayer_color = 10;
+	double underlayer_width = 11;
+	repeated Color color_palette = 12;
+}
+
+message StopsToVertex {
+	bytes stop_name = 1;
+	uint32 stop_in_id = 2;
+	uint32 stop_out_id = 3;
+}
+
+message RoutingSettings {
+	int32 wait_time = 1;
+	double velocity = 2;
+}
+
+message EdgesInfo {
+	uint32 edge_id = 1;
+	bytes name = 2;
+	double total_time = 3;
+	bool item_type = 4;
+	int32 span_count = 5;
+}
+
+message Edge {
+	uint32 from = 1;
+	uint32 to = 2;
+	double weight = 3;
+}
+
+message Graph {
+	uint32 vertex_count = 1;
+	repeated Edge edge = 2;
+}
+
+message Router {
+	RoutingSettings routing_settings = 1;
+	repeated StopsToVertex stops_to_vertex = 2;
+	repeated EdgesInfo edges_info = 3;	
+	Graph graph = 4;
+}
+
+message TransportCatalogue {
+	repeated Stop stops = 1;
+	repeated Bus buses = 2;
+	repeated Distance distances = 3;
+	RenderSettings render_settings = 4;
+	Router router = 5;
+}
